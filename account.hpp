@@ -6,7 +6,9 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <sstream>
 #include <iomanip>
+#include <string.h>
 
 struct Date
 {
@@ -24,7 +26,6 @@ struct account
 
     account() = default;
     account (long long accNumber_ ,std::string name_ ,std::string mobile_,std::string email_);
-    int dateToCompare();
     std::string dateToPrint();
     static std::string getCurrentDate();
 
@@ -38,6 +39,7 @@ long double strToDouble(std::string s);
 std::string doubleToString(double value);
 std::string numToString(long long n);
 
+bool charCompare(char c1, char c2);
 bool compareByName(account a, account b);
 bool compareByDate(account a, account b);
 bool compareByBalance(account a, account b);

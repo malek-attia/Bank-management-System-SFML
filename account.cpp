@@ -45,11 +45,6 @@ std::string account::dateToPrint()
     return stotal;
 }
 
-int account::dateToCompare()
-{
-    return date.year + date.month;
-}
-
 long long strToLL(std::string s)
 {
     int i;
@@ -192,12 +187,39 @@ account loadAccount(std::string acc_from_file)
     return acc_to_be_return;
 }
 
+bool charCompare(char c1, char c2){
+    return tolower(c1) < tolower(c2);
+}
+
 bool compareByName(account a, account b){
-    return a.name <= b.name ;
+    const std::string& name1 = a.name;
+    const std::string& name2 = b.name;
+
+    auto it1 = name1.begin();
+    auto it2 = name2.begin();
+
+    while (it1 != name1.end() && it2 != name2.end()) {
+        if (charCompare(*it1, *it2)) {
+            return true;
+        } else if (charCompare(*it2, *it1)) {
+            return false;
+        }
+
+        ++it1;
+        ++it2;
+    }
+
+    // shorter comes first
+    return name1.size() < name2.size();
 }
+
 bool compareByDate(account a, account b){
-    return a.dateToCompare() <= b.dateToCompare() ;
+    if(a.date.year != b.date.year){
+        return a.date.year < b.date.year;
+    }
+    return a.date.month < b.date.month;
 }
+
 bool compareByBalance(account a, account b){
     return a.balance <= b.balance ;
 }

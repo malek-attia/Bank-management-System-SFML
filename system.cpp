@@ -271,12 +271,12 @@ void System::renderMenu(std::string user){
         desicionButtons[i].shape.setSize(sf::Vector2f(scale * 1.75, scale * 0.7));
     }
     // Print
+    desicionButtons.push_back(Button(accStrings[name], sf::Vector2f(scale * 9 , scale * 5), scale)); // name button
+    desicionButtons[2].shape.setSize(sf::Vector2f(scale * 1.75, scale * 0.7));
     for(int i = 4; i < 6; i++){
         desicionButtons.push_back(Button(accStrings[i], sf::Vector2f(scale * 9 , scale * 5 +  (i-3) * (scale)), scale));
-        desicionButtons[i-2].shape.setSize(sf::Vector2f(scale * 1.75, scale * 0.7));
+        desicionButtons[i-1].shape.setSize(sf::Vector2f(scale * 1.75, scale * 0.7));
     }
-    // 0 name 1 number
-    //        2 balance 3 date
 
 
     /////////////// options input fields ///////////////
@@ -776,13 +776,13 @@ void System::renderMenu(std::string user){
                     if(!searching){
                         desicion = print;
                         // make desicion
-                        if(desicionButtons[number].isTouchingMouse(pos)){
+                        if(desicionButtons[2].isTouchingMouse(pos)){
                             desicion = name;
                         }
-                        else if(desicionButtons[balance - 2].isTouchingMouse(pos)){
+                        else if(desicionButtons[balance - 1].isTouchingMouse(pos)){
                             desicion = balance;
                         }
-                        else if(desicionButtons[date - 2].isTouchingMouse(pos)){
+                        else if(desicionButtons[date - 1].isTouchingMouse(pos)){
                             desicion = date;
                         }
                     }
@@ -900,7 +900,7 @@ void System::renderMenu(std::string user){
             
             switch (activeOption)
             {
-                case add:{
+                case add:
                     // acc members input fields
                     for(int i = 0; i < 4; i++){
                         inputDomains[add][i].draw(window, (i == activeDomain), basicBlue, activeBlue);
@@ -908,8 +908,8 @@ void System::renderMenu(std::string user){
                     // save button
                     optionButtons[save].draw(window, pos, darkBlue, activeBlue);
 
-                    break;}
-                case del:{
+                    break;
+                case del:
                     // acc num input field
                     inputDomains[del][save].draw(window, (number == activeDomain), basicBlue, activeBlue);
 
@@ -918,8 +918,8 @@ void System::renderMenu(std::string user){
                     if(activeAcc != none)
                         optionButtons[del].draw(window, pos, sf::Color::Red, activeRed);
 
-                    break;}
-                case modify:{
+                    break;
+                case modify:
                     // acc members input fields
                     for(int i = 0; i < 4; i++){
                         if(i && !modifying) break;
@@ -934,8 +934,8 @@ void System::renderMenu(std::string user){
                         optionButtons[modify].draw(window, pos, darkBlue, activeBlue);
                     }
 
-                    break;}
-                case search:{
+                    break;
+                case search:
                     // 'search by' buttons & desicion Text
                     if(!searching){
                         desicionText.setString(options[desicion]+" by: ");
@@ -959,32 +959,32 @@ void System::renderMenu(std::string user){
                         }
                     }
 
-                    break;}
-                case withdraw:{
+                    break;
+                case withdraw:
                     for(int i = 0; i < 2; i++){
                         inputDomains[withdraw][i].draw(window, (i == activeDomain), basicBlue, activeBlue);
                     }
                     
                     optionButtons[withdraw].draw(window, pos, darkBlue, activeBlue);
 
-                    break;}
-                case deposit:{
+                    break;
+                case deposit:
                     for(int i = 0; i < 2; i++){
                         inputDomains[deposit][i].draw(window, (i == activeDomain), basicBlue, activeBlue);
                     }
                     
                     optionButtons[deposit].draw(window, pos, darkBlue, activeBlue);
 
-                    break;}
-                case transfer:{
+                    break;
+                case transfer:
                     for(int i = 0; i < 3; i++){
                         inputDomains[transfer][i].draw(window, (i == activeDomain), basicBlue, activeBlue);
                     }
                     
                     optionButtons[transfer].draw(window, pos, darkBlue, activeBlue);
 
-                    break;}
-                case report:{
+                    break;
+                case report:
                     inputDomains[report][number].draw(window, (number == activeDomain), basicBlue, activeBlue);
                     
                     optionButtons[report].draw(window, pos, darkBlue, activeBlue);
@@ -995,14 +995,14 @@ void System::renderMenu(std::string user){
                         }
                     }
 
-                    break;}
-                case print:{
+                    break;
+                case print:
                     // 'search by' buttons & desicion Text
                     if(!searching){
                         desicionText.setString(options[desicion]+" by: ");
                         window.draw(desicionText);
-                        desicionButtons[number].draw(window, pos, basicGreen, activeGreen);
-                        for(int i = balance - 2; i <= date -2; i++){
+                        desicionButtons[2].draw(window, pos, basicGreen, activeGreen);
+                        for(int i = balance - 1; i <= date -1; i++){
                             desicionButtons[i].draw(window, pos, basicGreen, activeGreen);
                         }
                     }
@@ -1014,7 +1014,7 @@ void System::renderMenu(std::string user){
                         inputDomains[print][number].draw(window, activeDomain == number, basicBlue, activeBlue);
                     }
 
-                    break;}
+                    break;
             }
         }
         
