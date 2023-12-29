@@ -15,10 +15,9 @@ sf::VideoMode System::setResolution(){
     preLaunch.setFramerateLimit(10);
 
     sf::RectangleShape backGround;
-    backGround.setSize(sf::Vector2f(800, 450));
     sf::Texture BG;
     BG.loadFromFile("src/Textures/resolutions.jpg");
-    backGround.setTexture(&BG);
+    setTexture(backGround, BG, sf::Vector2f(0, 0), sf::Vector2f(800, 450));
 
     sf::VideoMode resolution;
     sf::VideoMode maxResolution = sf::VideoMode::getDesktopMode();
@@ -57,6 +56,20 @@ sf::VideoMode System::setResolution(){
 
 std::string System::renderLogin(){
 
+    enum Domains{
+        username,
+        password
+    };
+
+    enum Buttons{
+        Login,
+        Quit
+    };
+
+    enum HideState{
+        hide,
+        view
+    };
 
     // Texts
     sf::Text texts[5];
@@ -68,6 +81,19 @@ std::string System::renderLogin(){
         domains.push_back(InputDomain(strings[i], sf::Vector2f(scale * 2, scale * 3.25 + scale * i * 1.5),
         scale, sf::Color::White, sf::Color::Black));
     }
+
+    // hide texture
+    std::vector<sf::RectangleShape> hideViewButton(2);
+    std::vector<sf::Texture> hideViewTextures(2);
+    hideViewTextures[hide].loadFromFile("src/Textures/hide.png");
+    hideViewTextures[view].loadFromFile("src/Textures/view.png");
+
+    for(int i = hide; i <= view; i++){
+        setTexture(hideViewButton[i], hideViewTextures[i], sf::Vector2f(scale * 12.3, scale * 4.55), sf::Vector2f(scale * 1.2, scale * 1.2));
+    }
+    hideViewButton[view].setPosition(sf::Vector2f(scale * 12.3, scale * 4.5));
+
+    domains[password].hide = true;
 
 
     // Error text
@@ -103,9 +129,16 @@ std::string System::renderLogin(){
                 return "";
             }
             if(mouseClicked){
-                if(menuButtons[1].isTouchingMouse(pos)){
+                if(menuButtons[Quit].isTouchingMouse(pos)){
                     window.close();
                     return "";
+                }
+                for(int i = 0; i < 2; i++){
+                    if(hideViewButton[i].getGlobalBounds().contains(pos.x, pos.y)){
+                        domains[password].hide = !domains[password].hide;
+                        domains[password].flipHiddenText();
+                        break;
+                    }
                 }
                 activeBar = -1;
                 for(int i = 0; i < 2; i++){
@@ -122,10 +155,10 @@ std::string System::renderLogin(){
                         }
                     }
                     if(errorStat != 3){
-                        errorStat = login(domains[0].input, domains[1].input);
+                        errorStat = login(domains[username].input, domains[password].input);
                     }
                     if(!errorStat){
-                        return domains[0].input;
+                        return domains[username].input;
                     }
                 }
             }
@@ -151,6 +184,13 @@ std::string System::renderLogin(){
 
             // Login & Quit
             menuButtons[i].draw(window, pos, darkBlue, basicBlue);
+
+            // hide button
+            if(domains[password].hide){
+                window.draw(hideViewButton[hide]);
+            }else{
+                window.draw(hideViewButton[view]);
+            }
         }
         // Error Massage
         if(errorStat != -1){
@@ -169,9 +209,7 @@ void System::renderMenu(std::string user){
     sf::RectangleShape backGround;
     sf::Texture backGroundTexture;
     backGroundTexture.loadFromFile("src/Textures/mainBackGround.png");
-    backGround.setTexture(&backGroundTexture);
-    backGround.setPosition(sf::Vector2f(0, 0));
-    backGround.setSize(sf::Vector2f(window.getSize()));
+    setTexture(backGround, backGroundTexture, sf::Vector2f(0, 0), sf::Vector2f(window.getSize()));
 
     sf::Text hiMassage;
     setText(hiMassage, sf::Vector2f(scale , 0), sf::Color::White, 0.7 * scale);

@@ -20,6 +20,8 @@ struct InputDomain{
     InputBar inputBar;
     sf::Text text;
     std::string input;
+    bool hide;
+    std::string hidden;
     sf::Text inputText;
     InputDomain(std::string head, sf::Vector2f position, float scale,
      sf::Color inputColor = sf::Color::White, sf::Color headColor = sf::Color::White, sf::Vector2f barSize = sf::Vector2f(-1, -1));
@@ -29,6 +31,7 @@ struct InputDomain{
 
     void write(sf::Event event);
     void erase(sf::Event event);
+    void flipHiddenText();
 };
 
 struct Button{
@@ -43,5 +46,7 @@ struct Button{
 };
 
 void setText(sf::Text &text, sf::Vector2f position, sf::Color fillColor, float charSize);
+
+void setTexture(sf::RectangleShape &shape, sf::Texture &texture, sf::Vector2f position, sf::Vector2f size);
 
 #endif

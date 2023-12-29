@@ -9,13 +9,10 @@ Textures::Textures(){
 
 static Textures textures;
 
-InputDomain::InputBar::InputBar(sf::Vector2f position, float scale, sf::Vector2f size){
-    bar.setTexture(&textures.inputTexture);
-    bar.setPosition(position);
-    if(size == sf::Vector2f(-1, -1)){
-        size = sf::Vector2f(9 * scale, scale);
-    }
-    bar.setSize(size);
+void setTexture(sf::RectangleShape &shape, sf::Texture &texture, sf::Vector2f position, sf::Vector2f size){
+   shape.setTexture(&texture);
+   shape.setPosition(position);
+   shape.setSize(size);
 }
 
 void setText(sf::Text &text, sf::Vector2f position, sf::Color fillColor, float charSize){
@@ -25,12 +22,20 @@ void setText(sf::Text &text, sf::Vector2f position, sf::Color fillColor, float c
     text.setCharacterSize(charSize);
 }
 
+InputDomain::InputBar::InputBar(sf::Vector2f position, float scale, sf::Vector2f size){
+    if(size == sf::Vector2f(-1, -1)){
+        size = sf::Vector2f(9 * scale, scale);
+    }
+    setTexture(bar, textures.inputTexture, position, size);
+}
+
 InputDomain::InputDomain(std::string head, sf::Vector2f position, float scale, sf::Color inputColor, sf::Color headColor, sf::Vector2f barSize)
     : inputBar(sf::Vector2f(position.x + scale/4 * head.size(), position.y - scale/9), scale, barSize) {
 
     setText(inputText, sf::Vector2f(position.x + scale * 0.27 * head.size(), position.y), inputColor, scale / 2);
 
     setText(text, position, headColor, scale / 2);
+    hide = false;
     text.setString(head);
 }
 
@@ -51,14 +56,26 @@ void InputDomain::draw(sf::RenderWindow &window, bool active, sf::Color baseColo
 
 void InputDomain::write(sf::Event event){
     input += static_cast<char>(event.text.unicode);
-    inputText.setString(input);
+    hidden += '*';
+    inputText.setString(hide? hidden : input);
 }
 
 void InputDomain::erase(sf::Event event){
     if(input.size() > 0){
         input.pop_back();
+        hidden.pop_back();
     }
-    inputText.setString(input);
+    inputText.setString(hide? hidden : input);
+}
+
+void InputDomain::flipHiddenText(){
+    if(hide){
+        inputText.setString(hidden);
+    }
+    else
+    {
+        inputText.setString(input);
+    }
 }
 
 Button::Button(std::string head, sf::Vector2f position, float scale){
