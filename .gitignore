@@ -1,0 +1,6 @@
+src/
+Reports/
+.vscode/
+*.txt
+*.exe
+*.run
