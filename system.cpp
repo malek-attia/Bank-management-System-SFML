@@ -237,6 +237,7 @@ void System::renderMenu(std::string user){
         limit,
         noBalance,
         sameAcc,
+        noTransaction,
         saved
     };
     
@@ -258,7 +259,7 @@ void System::renderMenu(std::string user){
     std::string errorStrs[] = {
         "Fields can't be empty", "This account number is used", "account not found",
         "Can't delete non-zero balance account", "money amount can't exceed 10,000 $",
-        "Not enough credit", "Can't Transfer to same account", "Saved!"
+        "Not enough credit", "Can't Transfer to same account", "No Transactions Yet", "Saved!"
     };
     std::string buttonStrs[] = {
         "Save", "Delete", "Modify", "Search", "Withdraw",
@@ -363,7 +364,7 @@ void System::renderMenu(std::string user){
     std::vector<int> searchResults;
     int activeOption, activeDomain, errorStat, activeAcc, desicion, searchIdx;
     activeOption = activeDomain = errorStat = activeAcc = desicion = searchIdx = none;
-    bool typed, modifying = 0, searching;
+    bool typed, modifying = 0, searching, floatPoint = 0;
 
     sf::Clock blank;
 
@@ -518,6 +519,12 @@ void System::renderMenu(std::string user){
                         // ( .. && !modifying) to avoid overlapping touch of modButton and saveButton
                         modifying = 1;
                         typed = 1;
+                        inputDomains[modify][name].input = accounts[activeAcc].name;
+                        inputDomains[modify][phone].input = accounts[activeAcc].mobile;
+                        inputDomains[modify][email].input = accounts[activeAcc].email;
+                        for(int i = 1; i < 4; i++){
+                            inputDomains[modify][i].inputText.setString(inputDomains[modify][i].input);
+                        }
                     }
                     // Save
                     if(modifying && optionButtons[save].isTouchingMouse(pos) && !typed){
@@ -529,9 +536,9 @@ void System::renderMenu(std::string user){
                             }
                         }
                         if(errorStat == none){
-                            accounts[activeAcc].name = inputDomains[modify][1].input;
-                            accounts[activeAcc].mobile = inputDomains[modify][2].input;
-                            accounts[activeAcc].email = inputDomains[modify][3].input;
+                            accounts[activeAcc].name = inputDomains[modify][name].input;
+                            accounts[activeAcc].mobile = inputDomains[modify][phone].input;
+                            accounts[activeAcc].email = inputDomains[modify][email].input;
                             saveToFile(accounts);
                             modifying = 0;
                             for(int i = 0; i < 4; i++){
@@ -761,6 +768,7 @@ void System::renderMenu(std::string user){
 
                                 process = options[transfer] + " fr. " + from + amount + account::getCurrentDate();
                                 registerReport(to, process);
+                                floatPoint = 0;
 
                                 for(int i = 0; i < 3; i++){
                                     inputDomains[transfer][i].input = "";
@@ -773,6 +781,7 @@ void System::renderMenu(std::string user){
                     // Cancel
                     if(optionButtons[cancel].isTouchingMouse(pos)){
                         activeOption = activeDomain = errorStat = none;
+                        floatPoint = 0;
                         for(int i = 0; i < 3; i++){
                             inputDomains[transfer][i].input = "";
                             inputDomains[transfer][i].inputText.setString("");
@@ -798,6 +807,9 @@ void System::renderMenu(std::string user){
                                 errorStat = notFound;
                             }else{
                                 reportStrs = getReport(inputDomains[report][number].input);
+                                if(reportStrs.empty()){
+                                    errorStat = noTransaction;
+                                }
                             }
                         }
                         activeAcc = none;
@@ -871,7 +883,10 @@ void System::renderMenu(std::string user){
                 
                 if((activeOption == withdraw || activeOption == deposit || activeOption == transfer)){
                     if(inputDomains[activeOption][activeDomain].input.size() > 9) break;
-                    if(!std::isdigit(enteredChar)) break;
+                    if(activeOption == transfer && enteredChar == '.' && !floatPoint){
+                        floatPoint = 1;
+                    }
+                    else if(!std::isdigit(enteredChar)) break;
                 }
                 else{
                     if(activeDomain == number && (!std::isdigit(enteredChar) || inputDomains[activeOption][number].input.size() > 9)) break;
@@ -932,6 +947,7 @@ void System::renderMenu(std::string user){
                 }
                 accMembers[date].setString(accStrings[date]+": "+ accounts[activeAcc].dateToPrint());
                 for(int i = 0; i < 6; i++){
+                    if(i == date && errorStat == saved) break;
                     window.draw(accMembers[i]);
                 }
             }

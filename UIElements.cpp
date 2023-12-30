@@ -63,6 +63,8 @@ void InputDomain::write(sf::Event event){
 void InputDomain::erase(sf::Event event){
     if(input.size() > 0){
         input.pop_back();
+    }
+    if(hidden.size() > 0){
         hidden.pop_back();
     }
     inputText.setString(hide? hidden : input);
