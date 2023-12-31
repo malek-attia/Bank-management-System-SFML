@@ -288,7 +288,7 @@ void System::renderMenu(std::string user){
 
     // Report
     for(int i = 0; i < 5; i++){
-        setText(reportText[i], sf::Vector2f(scale * 3.5, scale * 1.5 + scale * (i + 1)), sf::Color::White, scale * 0.5);
+        setText(reportText[i], sf::Vector2f(scale * 3.2, scale * 1.5 + scale * (i + 1)), sf::Color::White, scale * 0.5);
     }
 
 
@@ -334,9 +334,9 @@ void System::renderMenu(std::string user){
     for(int i = 0; i < 2; i++){
         inputDomains[search].push_back(InputDomain(accStrings[i]+": ", sf::Vector2f(scale * 3.5, scale * 1.5), scale));
     }
-    inputDomains[search].push_back(InputDomain("", sf::Vector2f(scale * 12, scale * 4.3), scale,
+    inputDomains[search].push_back(InputDomain("", sf::Vector2f(scale * 12, scale * 3.3), scale,
      sf::Color::White, sf::Color::White, sf::Vector2f(2 * scale, scale)));
-    inputDomains[search][2].text.setPosition(sf::Vector2f(scale * 12, scale * 5.3));
+    inputDomains[search][2].text.setPosition(sf::Vector2f(scale * 12, scale * 4.3));
 
     // Withdraw
     inputDomains[withdraw].push_back(InputDomain(accStrings[number]+": ", sf::Vector2f(scale * 3.5, scale * 1.5), scale));
@@ -355,9 +355,9 @@ void System::renderMenu(std::string user){
     inputDomains[report].push_back(InputDomain(accStrings[number]+": ", sf::Vector2f(scale * 3.5, scale * 1.5), scale));\
 
     // Print
-    inputDomains[print].push_back(InputDomain("", sf::Vector2f(scale * 12, scale * 4.3), scale,
+    inputDomains[print].push_back(InputDomain("", sf::Vector2f(scale * 12, scale * 3.3), scale,
      sf::Color::White, sf::Color::White, sf::Vector2f(2 * scale, scale)));
-    inputDomains[print][number].text.setPosition(sf::Vector2f(scale * 12, scale * 5.3));
+    inputDomains[print][number].text.setPosition(sf::Vector2f(scale * 12, scale * 4.3));
     
     
     std::vector<int> searchResults;
@@ -760,7 +760,7 @@ void System::renderMenu(std::string user){
 
                                 std::string from = inputDomains[transfer][number].input;
                                 std::string to = inputDomains[transfer][1].input;
-                                std::string amount = " " + inputDomains[transfer][2].input + " $ ";
+                                std::string amount = " " + doubleToString(strToDouble(inputDomains[transfer][2].input)) + "$ ";
 
                                 std::string process = options[transfer] + " to " + to + amount + account::getCurrentDate();
                                 registerReport(from, process);
