@@ -78,7 +78,8 @@ long double strToDouble(std::string s)
     if (s[i] == '.')
     {
         i++;
-        for (; i < s.size(); ++i)
+        int numOfDigits = i + 2; // 2 => num of digits after float point
+        for (; i < numOfDigits; ++i)
         {
             Factor *= 0.1;
             result += static_cast<double>(s[i] - '0') * Factor;
@@ -95,7 +96,7 @@ long double strToDouble(std::string s)
 
 std::string doubleToString(double value) {
     long long intPart  = static_cast<long long>(value);
-    long long fracPart = static_cast<long long>((value - intPart) * 1000000);
+    long long fracPart = static_cast<long long>((value - intPart) * 100);
     std::string intStr = (intPart == 0) ? "0" : "";
     
     while (intPart > 0) {
@@ -107,7 +108,7 @@ std::string doubleToString(double value) {
     std::string fracStr;
     
     if (fracPart > 0) {
-        int trailingZeroes = 5 - floor(log10(fracPart));
+        int trailingZeroes = 1 - floor(log10(fracPart));
         intStr += '.';
         while(trailingZeroes--) intStr += '0';
         while (fracPart > 0) {
@@ -134,7 +135,7 @@ std::string numToString(long long n)
 
 account loadAccount(std::string acc_from_file)
 {
-    account acc_to_be_return(0, "", "", "");
+    account acc_to_be_return;
     int i = 0, last = 0, comma = 0;
 
     while (acc_from_file[i] != '\0')
