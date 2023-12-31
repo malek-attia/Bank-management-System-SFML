@@ -9,7 +9,6 @@ System::System()
     scale = window.getSize().y / 9;
 }
 
-
 sf::VideoMode System::setResolution(){
     sf::RenderWindow preLaunch(sf::VideoMode(800, 450), "Set Resolution", sf::Style::Default);
     preLaunch.setFramerateLimit(10);
@@ -877,8 +876,11 @@ void System::renderMenu(std::string user){
 
             }
             // Entering Text
-            if(event.type == sf::Event::TextEntered && activeOption != none && activeDomain != none &&
-             inputDomains[activeOption][activeDomain].input.size() <= 30){
+            if (
+                event.type == sf::Event::TextEntered &&
+                activeOption != none && activeDomain != none &&
+                inputDomains[activeOption][activeDomain].input.size() <= 30
+            ) {
                 char enteredChar = static_cast<char>(event.text.unicode);
                 
                 if((activeOption == withdraw || activeOption == deposit || activeOption == transfer)){
@@ -898,8 +900,16 @@ void System::renderMenu(std::string user){
 
                 inputDomains[activeOption][activeDomain].write(event);
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && activeDomain != none
-             && blank.getElapsedTime().asMilliseconds() >= 50) {
+            if (
+                sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) &&
+                activeDomain != none &&
+                blank.getElapsedTime().asMilliseconds() >= 50
+            ) {
+                if(activeOption == transfer && floatPoint){
+                    int lastCharIdx =  inputDomains[activeOption][activeDomain].input.size() - 1;
+                    if(inputDomains[activeOption][activeDomain].input[ lastCharIdx ] == '.')
+                        floatPoint = 0;
+                }
                 inputDomains[activeOption][activeDomain].erase(event);
                 blank.restart();
             }
