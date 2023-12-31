@@ -32,6 +32,7 @@ struct account
 
 };
 
+
 account loadAccount(std::string acc_from_file);
 
 std::string doubleToString(double value);

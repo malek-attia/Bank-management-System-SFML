@@ -19,17 +19,17 @@ int login(std::string username, std::string password)
             if (password == storedPassword)
             {
                 useraccount.close();
-                return 0;
+                return 0; // Login
             }
             else
             {
                 useraccount.close();
-                return 2;
+                return 2; // wrong password
             }
         }
     }
     useraccount.close();
-    return 1;
+    return 1; // not found
 }
 
 void load(std::vector<account> &accounts)

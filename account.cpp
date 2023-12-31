@@ -8,6 +8,9 @@ account::account (long long accNumber_ ,std::string name_ ,std::string mobile_,s
     accNumber = accNumber_;
     balance = 0.0;
 
+    
+account::dateToPrint();
+
     auto now = std::chrono::system_clock::now();
     time_t currentTime = std::chrono::system_clock::to_time_t(now);
     tm* gottime = gmtime(&currentTime);

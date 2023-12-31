@@ -879,7 +879,7 @@ void System::renderMenu(std::string user){
             if (
                 event.type == sf::Event::TextEntered &&
                 activeOption != none && activeDomain != none &&
-                inputDomains[activeOption][activeDomain].input.size() <= 30
+                inputDomains[activeOption][activeDomain].input.size() <= 25
             ) {
                 char enteredChar = static_cast<char>(event.text.unicode);
                 
