@@ -50,6 +50,4 @@ This GUI Bank Management System showcases not only core banking features like ac
 
 ## Demo
 
-You can download and view the demo video from the repository:
-
-[Download Demo Video](demo/demo.mp4)
+[(demo)[demo/demo.mp4]](https://github.com/user-attachments/assets/b66c084f-4930-4a40-8554-363719a9954b)
